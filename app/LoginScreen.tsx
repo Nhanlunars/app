@@ -1,7 +1,7 @@
 // app/screens/LoginScreen.tsx
+import axios from "@/axios";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import axios from "axios";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
@@ -27,7 +27,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const [secureText, setSecureText] = useState(true);
   const [errMessage, setErrMassage] = useState("");
-
+  //http://172.30.192.1:8080
   const handleLogin = async () => {
     //console.log(email, password);
     if (!email || !password) {
@@ -36,7 +36,7 @@ export default function LoginScreen() {
     }
 
     try {
-      const data = await axios.post("http://192.168.1.131:8080/api/login", {
+      const data = await axios.post("/api/login", {
         email,
         password,
       });

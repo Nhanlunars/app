@@ -3,10 +3,9 @@ import {
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
-import { router } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import BottomNav from "./BottomNav";
 const SettingScreen = () => {
   return (
     <View style={styles.container}>
@@ -48,11 +47,12 @@ const SettingScreen = () => {
       </View>
 
       {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <NavItem 
-        icon="home" 
-        label="Home" 
-        onPress={() => router.push("/HomeScreen")} />
+      {/* <View style={styles.bottomNav}>
+        <NavItem
+          icon="home"
+          label="Home"
+          onPress={() => router.push("/HomeScreen")}
+        />
         <NavItem
           icon="flash"
           label="Charge"
@@ -66,9 +66,10 @@ const SettingScreen = () => {
         <NavItem
           icon="settings-outline"
           label="Setting"
-          //   onPress={() => router.push("/SettingScreen")}
+          onPress={() => router.push("/SettingScreen")}
         />
-      </View>
+      </View> */}
+      <BottomNav />
     </View>
   );
 };

@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import Footer from "./footer";
 import BottomNav from "./BottomNav";
 const NotificationScreen = () => {
   return (
@@ -61,10 +60,11 @@ const NotificationScreen = () => {
           <Text style={styles.navLabel}>Setting</Text>
         </TouchableOpacity>
       </View> */}
-      <View style={styles.bottomNav}>
-        <Footer />
-        <BottomNav />
-      </View>
+      {/* <View style={styles.bottomNav}>
+        {/* <Footer /> *
+        {/* <BottomNav /> 
+      </View> */}
+      <BottomNav />
     </View>
   );
 };

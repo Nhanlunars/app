@@ -38,13 +38,21 @@ export default function RootLayout() {
         {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" /> */}
         <Stack.Screen name="WelcomeScreen" options={{ headerShown: false }} />
-        <Stack.Screen name="LoginScreen" />
-        <Stack.Screen name="RegisterScreen" />
-        <Stack.Screen name="HomeScreen" />
-
-        <Stack.Screen name="StationListScreen" />
-        <Stack.Screen name="NotificationScreen" />
-        <Stack.Screen name="SettingScreen" />
+        <Stack.Screen name="LoginScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="RegisterScreen" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="HomeScreen"
+          /* component={HomeScreen}*/ options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ChargerListScreen"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="NotificationScreen"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="SettingScreen" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

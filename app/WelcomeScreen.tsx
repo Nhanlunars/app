@@ -1,10 +1,9 @@
 // app/screens/WelcomeScreen.tsx
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { useRouter } from 'expo-router';
-  const router = useRouter();
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useRouter } from "expo-router";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+const router = useRouter();
 type RootStackParamList = {
   Login: undefined;
   Register: undefined;
@@ -25,17 +24,16 @@ export default function WelcomeScreen() {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => router.push('/LoginScreen')}
+          onPress={() => router.push("/LoginScreen")}
         >
           <Text style={styles.buttonText}>Đăng Nhập</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, { marginTop: 12 }]}
-          onPress={() => router.push('/RegisterScreen')}
+          onPress={() => router.push("/RegisterScreen")}
         >
           <Text style={styles.buttonText}>Đăng Ký</Text>
         </TouchableOpacity>
-        
       </View>
     </View>
   );
@@ -44,43 +42,43 @@ export default function WelcomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#4AA7A0',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "#4AA7A0",
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 24,
     borderRadius: 20,
   },
   textContainer: {
     marginBottom: 80,
-    alignItems: 'center',
+    alignItems: "center",
   },
   title: {
     fontSize: 18,
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   subtitle: {
     fontSize: 12,
-    color: 'white',
+    color: "white",
     marginTop: 4,
-    textAlign: 'center',
+    textAlign: "center",
   },
   buttonContainer: {
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center",
   },
   button: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 30,
-    minWidth: '60%',
+    minWidth: "60%",
   },
   buttonText: {
-    color: '#000',
-    fontWeight: '600',
+    color: "#000",
+    fontWeight: "600",
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

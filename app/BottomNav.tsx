@@ -11,7 +11,7 @@ const BottomNav = () => {
       <View style={styles.bottomNav}>
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push("/")}
+          onPress={() => router.push("/HomeScreen")}
         >
           <Ionicons name="home" size={24} color="#000" />
           <Text style={styles.navLabel}>Home</Text>
@@ -55,6 +55,42 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fefefe",
+  },
+  header: {
+    backgroundColor: "#57d2d2",
+    padding: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  notificationContainer: {
+    backgroundColor: "#fff",
+    padding: 16,
+    margin: 10,
+    borderRadius: 8,
+    elevation: 2,
+  },
+  mainText: {
+    fontSize: 14,
+    marginBottom: 10,
+    lineHeight: 20,
+  },
+  note: {
+    fontWeight: "bold",
+    color: "#444",
+  },
+  divider: {
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    marginVertical: 8,
+  },
+  timeText: {
+    fontSize: 12,
+    color: "#888",
+    textAlign: "right",
   },
   bottomNav: {
     position: "absolute",
