@@ -1,8 +1,10 @@
 import axios from "@/axios";
+import StationCard from "@/components/StationCard";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  FlatList,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -11,9 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
 import BottomNav from "./BottomNav";
-const router = useRouter();
 const stations = [
   {
     id: "001",
@@ -41,27 +41,40 @@ type Location = {
   city: string;
   district: string;
   ward: string;
-  lat: number;
-  lng: number;
 };
 type Charger = {
   id: number;
   charger_name: string;
   location: Location;
-  type: string;
+  type: Type;
   status: string;
   updatedAt: string;
+};
+type Type = {
+  id: number;
+  type_name: string;
+  default_price: string;
+  describe: string;
+  status: string;
 };
 
 const ChargerListScreen = () => {
   const [chargers, setChargers] = useState<Charger[]>([]);
+  const [types, setTypes] = useState<Type[]>([]);
+  const { charger_id } = useLocalSearchParams();
   const [search, setSearch] = useState("");
-  const [filterTab, setFilterTab] = useState<"all" | "in_use">("all");
+  const [filterTab, setFilterTab] = useState<"all" | "S1" | "S4">("all");
   const getCharger = async () => {
     try {
-      const response = await axios.get(`/api/get-all-charger?id=${"All"}`);
+      const response = await axios.get(`/api/get-all-charger?id=${charger_id}`);
+      const allType = await axios.get(
+        `/api/get-all-type-by-chargerid?charger_id=${charger_id}`
+      );
+
       setChargers(response.data.chargers); // điều chỉnh nếu data nằm trong `response.data.data`
+      setTypes(allType.data.types);
       console.log("charger", response.data.chargers);
+      console.log("type", allType.data.types);
     } catch (error) {
       console.error("Error loading chargers:", error);
     }
@@ -70,12 +83,11 @@ const ChargerListScreen = () => {
     getCharger();
   }, []);
   // const filteredStations = stations.filter((station) => {
-  const filteredStations = chargers.filter((station) => {
-    const matchSearch = station.charger_name
+  const filteredStations = types.filter((type) => {
+    const matchSearch = type.type_name
       .toLowerCase()
       .includes(search.toLowerCase());
-    const matchStatus =
-      filterTab === "all" ? true : station.status !== "Còn Trống";
+    const matchStatus = filterTab === "all" ? true : type.status !== filterTab;
     return matchSearch && matchStatus;
   });
 
@@ -108,44 +120,48 @@ const ChargerListScreen = () => {
               <Text style={styles.tabText}>Tất Cả</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.tab, filterTab === "in_use" && styles.activeTab]}
-              onPress={() => setFilterTab("in_use")}
+              style={[styles.tab, filterTab === "S1" && styles.activeTab]}
+              onPress={() => setFilterTab("S1")}
+            >
+              <Text style={styles.tabText}>Đang Sử Dụng</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.tab, filterTab === "S4" && styles.activeTab]}
+              onPress={() => setFilterTab("S4")}
             >
               <Text style={styles.tabText}>Đang Sử Dụng</Text>
             </TouchableOpacity>
           </View>
 
           {/* Station List */}
-          {/* <FlatList
-        data={filteredStations}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <StationCard {...item} />}
-        contentContainerStyle={{ paddingBottom: 100 }}
-      /> */}
-
-          {chargers.map((charger) => (
-            <View key={charger.id} style={styles.stationCard}>
+          <FlatList
+            data={filteredStations}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <StationCard {...item} />}
+            contentContainerStyle={{ paddingBottom: 100 }}
+          />
+          {/* {types.map((type) => (
+            <View key={type.id} style={styles.stationCard}>
               <Icon name="flash-outline" size={28} color="#000" />
               <View style={{ flex: 1, marginLeft: 10 }}>
                 <Text style={styles.stationTitle}>
-                  Tên Máy: {charger.charger_name || "Không rõ"}
+                  Tên Máy: {type.type_name || "Không rõ"}
                 </Text>
                 <Text style={styles.stationSubtitle}>
-                  Vị Trí: {charger.location.location_name || "Chưa có vị trí"}
+                  Giá: {type.default_price || "Không rõ"}
+                </Text>
+                <Text style={styles.stationSubtitle}>
+                  Mô tả: {type.describe || "Không rõ"}
+                </Text>
+                <Text style={styles.stationSubtitle}>
+                  Trạng thái: {type.status || "Không rõ"}
                 </Text>
               </View>
-              <TouchableOpacity
-                onPress={() =>
-                  router.push({
-                    pathname: "/ChargerScreen",
-                    params: { charger_id: charger.id },
-                  })
-                }
-              >
+              <TouchableOpacity>
                 <Text style={styles.detailText}>Xem Chi Tiết</Text>
               </TouchableOpacity>
             </View>
-          ))}
+          ))} */}
         </ScrollView>
       </SafeAreaView>
       <View style={styles.footer}>

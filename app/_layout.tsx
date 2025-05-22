@@ -23,27 +23,11 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      {/* <NavigationContainer>
-            <Stack.Navigator
-              initialRouteName="Start"
-              screenOptions={{ headerShown: false }}
-            >
-              <Stack.Screen name="Start" component={WelcomeScreen} />
-              <Stack.Screen name="Login" component={LoginScreen} />
-              <Stack.Screen name="Register" component={RegisterScreen} />
-              <Stack.Screen name="Home" component={HomeScreen} />
-            </Stack.Navigator>
-          </NavigationContainer> */}
       <Stack>
-        {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" /> */}
         <Stack.Screen name="WelcomeScreen" options={{ headerShown: false }} />
         <Stack.Screen name="LoginScreen" options={{ headerShown: false }} />
         <Stack.Screen name="RegisterScreen" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="HomeScreen"
-          /* component={HomeScreen}*/ options={{ headerShown: false }}
-        />
+        <Stack.Screen name="HomeScreen" options={{ headerShown: false }} />
         <Stack.Screen
           name="ChargerListScreen"
           options={{ headerShown: false }}

@@ -27,17 +27,6 @@ type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
 interface Props {
   navigation: HomeScreenNavigationProp;
 }
-// const [chargers, setChargers] = useState([]);
-// const getCharger = async () => {
-//   try {
-//     const response = await axios.get("/api/get-all-charger");
-//     const chargersData = response.data;
-//     setChargers(chargersData);
-//     console.log(chargersData);
-//   } catch (error) {
-//     console.error("Error loading users:", error);
-//   }
-// };
 
 const HomeScreen = ({ navigation }: Props) => {
   type Location = {
@@ -154,7 +143,14 @@ const HomeScreen = ({ navigation }: Props) => {
                       location.city || "Chưa có vị trí"}
                   </Text>
                 </View>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push({
+                      pathname: "/LocationScreen",
+                      params: { location_id: location.id },
+                    })
+                  }
+                >
                   <Text style={styles.detailText}>Xem Chi Tiết</Text>
                 </TouchableOpacity>
               </View>
@@ -184,25 +180,6 @@ const HomeScreen = ({ navigation }: Props) => {
           </View>
         </ScrollView>
       </SafeAreaView>
-
-      {/* <View style={styles.footer}>
-        <TouchableOpacity onPress={() => router.push("/HomeScreen")}>
-          <Icon name="home" size={24} color="#000" />
-          <Text style={styles.footer}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push("/StationListScreen")}>
-          <Icon name="flash" size={24} color="#000" />
-          <Text style={styles.footer}>Charge</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push("/NotificationScreen")}>
-          <Icon name="notifications-outline" size={24} color="#000" />
-          <Text style={styles.footer}>Notification</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push("/SettingScreen")}>
-          <Icon name="settings-outline" size={24} color="#000" />
-          <Text style={styles.footer}>Setting</Text>
-        </TouchableOpacity>
-      </View> */}
       <View style={styles.footer}>
         <BottomNav />
       </View>
@@ -240,10 +217,11 @@ const styles = StyleSheet.create({
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginTop: 5,
+    marginBottom: 5,
   },
   sectionTitle: { fontWeight: "bold", fontSize: 16 },
-  viewAll: { fontSize: 12, color: "#007AFF" },
+  viewAll: { fontSize: 12, color: "#007AFF",  justifyContent: "space-around" },
   stationCard: {
     backgroundColor: "#D9D9D9",
     borderRadius: 8,

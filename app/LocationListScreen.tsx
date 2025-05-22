@@ -13,32 +13,16 @@ import Icon from "react-native-vector-icons/Ionicons";
 import BottomNav from "./BottomNav";
 
 const router = useRouter();
-
-// type RootStackParamList = {
-//   Home: undefined;
-//   Profile: { userId: string };
-//   // ... thêm các màn khác nếu có
-// };
-
-// type LocationListScreenNavigationProp = StackNavigationProp<RootStackParamList, "Home">;
-
-// interface Props {
-//   navigation: LocationListScreenNavigationProp;
-// }
-const LocationListScreen = (/*{ navigation }: Props*/) => {
+const LocationListScreen = () => {
   type Location = {
     id: number;
     location_name: string;
-    location: string;
-    //location_name: string;
     address: string;
     city: string;
     district: string;
     ward: string;
     lat: number;
     lng: number;
-    createdAt: string;
-    updatedAt: string;
   };
 
   const getLocation = async () => {
@@ -83,7 +67,17 @@ const LocationListScreen = (/*{ navigation }: Props*/) => {
                   </Text>
                 </View>
                 <TouchableOpacity>
-                  <Text style={styles.detailText} onPress={() => router.push("/LocationScreen")} >Xem Chi Tiết</Text>
+                  <Text
+                    style={styles.detailText}
+                    onPress={() =>
+                      router.push({
+                        pathname: "/LocationScreen",
+                        params: { location_id: location.id },
+                      })
+                    }
+                  >
+                    Xem Chi Tiết
+                  </Text>
                 </TouchableOpacity>
               </View>
             ))}

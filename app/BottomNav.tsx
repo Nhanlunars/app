@@ -19,7 +19,7 @@ const BottomNav = () => {
 
         <TouchableOpacity
           style={styles.navItem}
-          onPress={() => router.push("/StationListScreen")}
+          onPress={() => router.push("/ChargerListScreen")}
         >
           <MaterialCommunityIcons
             name="battery-charging"

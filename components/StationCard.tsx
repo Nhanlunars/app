@@ -4,20 +4,24 @@ import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 type StationProps = {
-  id: string;
-  name: string;
-  location: string;
+  id: number;
+  type_name: string;
+  default_price: string;
+    describe: string;
+
   status: string;
 };
 
-const StationCard = ({ id, name, location, status }: StationProps) => (
+const StationCard = ({ id, type_name, default_price,describe, status }: StationProps) => (
   <View style={styles.card}>
     <Text style={styles.title}>Trạm Sạc {id}</Text>
     <View style={styles.infoRow}>
       <MaterialCommunityIcons name="ev-station" size={24} color="black" />
       <View style={styles.textInfo}>
-        <Text>Tên Máy: {name}</Text>
-        <Text>Vị Trí: {location}</Text>
+        <Text>Tên Máy: {type_name}</Text>
+        <Text>Vị Trí: {default_price}</Text>
+                <Text>Mô tả: {describe}</Text>
+
         <Text>Trạng Thái: {status}</Text>
       </View>
     </View>
