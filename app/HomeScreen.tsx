@@ -95,66 +95,42 @@ const HomeScreen = ({ navigation }: Props) => {
                 <Text style={styles.viewAll}>Xem Tất Cả</Text>
               </TouchableOpacity>
             </View>
-
-            {/* <View style={styles.stationCard}>
-            <Icon name="flash-outline" size={28} color="#000" />
-            <View style={{ flex: 1, marginLeft: 10 }}>
-              <Text style={styles.stationTitle}>
-                Tên Máy: Trạm Sạc Xe Máy Điện
-              </Text>
-              <Text style={styles.stationSubtitle}>
-                Vị Trí: Cửa Hàng Xăng Dầu
-              </Text>
-            </View>
-            <TouchableOpacity>
-              <Text style={styles.detailText}>Xem Chi Tiết</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.stationCard}>
-            <Icon name="flash-outline" size={28} color="#000" />
-            <View style={{ flex: 1, marginLeft: 10 }}>
-              <Text style={styles.stationTitle}>
-                Tên Máy: Trạm Sạc Xe Máy Điện
-              </Text>
-              <Text style={styles.stationSubtitle}>
-                Vị Trí: Cửa Hàng Sửa Chữa
-              </Text>
-            </View>
-            <TouchableOpacity>
-              <Text style={styles.detailText}>Xem Chi Tiết</Text>
-            </TouchableOpacity>
-          </View> */}
-            {locations.slice(0, 5).map((location) => (
-              <View key={location.id} style={styles.stationCard}>
-                <Icon name="flash-outline" size={28} color="#000" />
-                <View style={{ flex: 1, marginLeft: 10 }}>
-                  <Text style={styles.stationTitle}>
-                    Tên Trạm: {location.location_name || "Không rõ"}
-                  </Text>
-                  <Text style={styles.stationSubtitle}>
-                    Địa Chỉ:{" "}
-                    {location.address +
-                      " " +
-                      location.ward +
-                      " " +
-                      location.district +
-                      " " +
-                      location.city || "Chưa có vị trí"}
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() =>
-                    router.push({
-                      pathname: "/LocationScreen",
-                      params: { location_id: location.id },
-                    })
-                  }
-                >
-                  <Text style={styles.detailText}>Xem Chi Tiết</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
+            {!locations ? (
+              <p>Loading....</p>
+            ) : (
+              <>
+                {locations.slice(0, 5).map((location) => (
+                  <View key={location.id} style={styles.stationCard}>
+                    <Icon name="location" size={28} color="#000" />
+                    <View style={{ flex: 1, marginLeft: 10 }}>
+                      <Text style={styles.stationTitle}>
+                        Tên Trạm: {location.location_name || "Không rõ"}
+                      </Text>
+                      <Text style={styles.stationSubtitle}>
+                        Địa Chỉ:{" "}
+                        {location.address +
+                          " " +
+                          location.ward +
+                          " " +
+                          location.district +
+                          " " +
+                          location.city || "Chưa có vị trí"}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() =>
+                        router.push({
+                          pathname: "/LocationScreen",
+                          params: { location_id: location.id },
+                        })
+                      }
+                    >
+                      <Text style={styles.detailText}>Xem Chi Tiết</Text>
+                    </TouchableOpacity>
+                  </View>
+                ))}
+              </>
+            )}
           </View>
 
           <View style={styles.section}>
@@ -221,7 +197,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   sectionTitle: { fontWeight: "bold", fontSize: 16 },
-  viewAll: { fontSize: 12, color: "#007AFF",  justifyContent: "space-around" },
+  viewAll: { fontSize: 12, color: "#007AFF", justifyContent: "space-around" },
   stationCard: {
     backgroundColor: "#D9D9D9",
     borderRadius: 8,

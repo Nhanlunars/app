@@ -1,8 +1,10 @@
 import axios from "@/axios";
+import ChargerCard from "@/components/ChargerCard";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  FlatList,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -11,29 +13,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
 import BottomNav from "./BottomNav";
 const router = useRouter();
-const stations = [
-  {
-    id: "001",
-    name: "Trạm Sạc Xe Máy Điện",
-    location: "Cửa Hàng Xăng Dầu",
-    status: "Còn Trống",
-  },
-  {
-    id: "002",
-    name: "quang chau",
-    location: "Cửa Hàng Sửa Chữa",
-    status: "Còn Trống",
-  },
-  {
-    id: "003",
-    name: "phong nam",
-    location: "Cửa Hàng Sửa Chữa",
-    status: "Hết Chỗ",
-  },
-];
+
 type Location = {
   id: number;
   location_name: string;
@@ -48,9 +30,8 @@ type Charger = {
   id: number;
   charger_name: string;
   location: Location;
-  type: string;
-  status: string;
-  updatedAt: string;
+  last_maintence_date: string;
+  installation_date: string;
 };
 
 const ChargerListScreen = () => {
@@ -69,13 +50,12 @@ const ChargerListScreen = () => {
   useEffect(() => {
     getCharger();
   }, []);
-  // const filteredStations = stations.filter((station) => {
-  const filteredStations = chargers.filter((station) => {
-    const matchSearch = station.charger_name
+  const filteredChargers = chargers.filter((charger) => {
+    const matchSearch = charger.charger_name
       .toLowerCase()
       .includes(search.toLowerCase());
-    const matchStatus =
-      filterTab === "all" ? true : station.status !== "Còn Trống";
+    const matchStatus = "a";
+    // filterTab === "all" ? true : charger.status !== "Còn Trống";
     return matchSearch && matchStatus;
   });
 
@@ -115,15 +95,15 @@ const ChargerListScreen = () => {
             </TouchableOpacity>
           </View>
 
-          {/* Station List */}
-          {/* <FlatList
-        data={filteredStations}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <StationCard {...item} />}
-        contentContainerStyle={{ paddingBottom: 100 }}
-      /> */}
+          {/* Charger List */}
+          <FlatList
+            data={filteredChargers}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <ChargerCard {...item} />}
+            contentContainerStyle={{ paddingBottom: 10 }}
+          />
 
-          {chargers.map((charger) => (
+          {/* {chargers.map((charger) => (
             <View key={charger.id} style={styles.stationCard}>
               <Icon name="flash-outline" size={28} color="#000" />
               <View style={{ flex: 1, marginLeft: 10 }}>
@@ -145,7 +125,7 @@ const ChargerListScreen = () => {
                 <Text style={styles.detailText}>Xem Chi Tiết</Text>
               </TouchableOpacity>
             </View>
-          ))}
+          ))} */}
         </ScrollView>
       </SafeAreaView>
       <View style={styles.footer}>

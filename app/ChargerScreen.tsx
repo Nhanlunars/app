@@ -1,5 +1,5 @@
 import axios from "@/axios";
-import StationCard from "@/components/StationCard";
+import TypeCard from "@/components/TypeCard";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect, useState } from "react";
@@ -14,26 +14,7 @@ import {
   View,
 } from "react-native";
 import BottomNav from "./BottomNav";
-const stations = [
-  {
-    id: "001",
-    name: "Trạm Sạc Xe Máy Điện",
-    location: "Cửa Hàng Xăng Dầu",
-    status: "Còn Trống",
-  },
-  {
-    id: "002",
-    name: "quang chau",
-    location: "Cửa Hàng Sửa Chữa",
-    status: "Còn Trống",
-  },
-  {
-    id: "003",
-    name: "phong nam",
-    location: "Cửa Hàng Sửa Chữa",
-    status: "Hết Chỗ",
-  },
-];
+
 type Location = {
   id: number;
   location_name: string;
@@ -59,7 +40,7 @@ type Type = {
 };
 
 const ChargerListScreen = () => {
-  const [chargers, setChargers] = useState<Charger[]>([]);
+  const [chargers, setChargers] = useState<Charger>();
   const [types, setTypes] = useState<Type[]>([]);
   const { charger_id } = useLocalSearchParams();
   const [search, setSearch] = useState("");
@@ -72,7 +53,7 @@ const ChargerListScreen = () => {
       );
 
       setChargers(response.data.chargers); // điều chỉnh nếu data nằm trong `response.data.data`
-      setTypes(allType.data.types);
+      setTypes(allType.data.types.reverse());
       console.log("charger", response.data.chargers);
       console.log("type", allType.data.types);
     } catch (error) {
@@ -82,8 +63,7 @@ const ChargerListScreen = () => {
   useEffect(() => {
     getCharger();
   }, []);
-  // const filteredStations = stations.filter((station) => {
-  const filteredStations = types.filter((type) => {
+  const filteredTypes = types.filter((type) => {
     const matchSearch = type.type_name
       .toLowerCase()
       .includes(search.toLowerCase());
@@ -95,8 +75,16 @@ const ChargerListScreen = () => {
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
         <ScrollView contentContainerStyle={{ padding: 10 }}>
-          {/* Search Bar */}
-          <View style={styles.searchContainer}>
+          {!chargers ? (
+            <p>Loading....</p>
+          ) : (
+            <>
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>
+                Trụ Sạc: {chargers.charger_name}
+              </Text>
+            </View>
+             <View style={styles.searchContainer}>
             <TextInput
               style={styles.searchInput}
               placeholder="Tìm Kiếm........."
@@ -135,33 +123,15 @@ const ChargerListScreen = () => {
 
           {/* Station List */}
           <FlatList
-            data={filteredStations}
+            data={filteredTypes}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => <StationCard {...item} />}
+            renderItem={({ item }) => <TypeCard {...item} />}
             contentContainerStyle={{ paddingBottom: 100 }}
           />
-          {/* {types.map((type) => (
-            <View key={type.id} style={styles.stationCard}>
-              <Icon name="flash-outline" size={28} color="#000" />
-              <View style={{ flex: 1, marginLeft: 10 }}>
-                <Text style={styles.stationTitle}>
-                  Tên Máy: {type.type_name || "Không rõ"}
-                </Text>
-                <Text style={styles.stationSubtitle}>
-                  Giá: {type.default_price || "Không rõ"}
-                </Text>
-                <Text style={styles.stationSubtitle}>
-                  Mô tả: {type.describe || "Không rõ"}
-                </Text>
-                <Text style={styles.stationSubtitle}>
-                  Trạng thái: {type.status || "Không rõ"}
-                </Text>
-              </View>
-              <TouchableOpacity>
-                <Text style={styles.detailText}>Xem Chi Tiết</Text>
-              </TouchableOpacity>
-            </View>
-          ))} */}
+</>
+          )}
+          {/* Search Bar */}
+         
         </ScrollView>
       </SafeAreaView>
       <View style={styles.footer}>
@@ -190,6 +160,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     marginVertical: 10,
   },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  sectionTitle: { fontWeight: "bold", fontSize: 16 },
   tab: {
     paddingVertical: 6,
     paddingHorizontal: 16,

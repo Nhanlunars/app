@@ -1,19 +1,24 @@
 import axios from "@/axios";
+import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
+
+import LocationCard from "@/components/LocationCard";
 import React, { useEffect, useState } from "react";
 import {
+  FlatList,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  TextInput,
   View,
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
 import BottomNav from "./BottomNav";
 
 const router = useRouter();
 const LocationListScreen = () => {
+  const [search, setSearch] = useState("");
+
   type Location = {
     id: number;
     location_name: string;
@@ -38,55 +43,55 @@ const LocationListScreen = () => {
     getLocation();
   }, []);
   const [locations, setLocations] = useState<Location[]>([]);
+  const filteredStations = locations.filter((location) => {
+    const matchSearch = location.location_name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    return matchSearch;
+  });
 
   return (
     <View style={styles.container}>
-      <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
-        <ScrollView contentContainerStyle={{ padding: 10 }}>
-          <View style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Danh Sách Trạm Sạc</Text>
-            </View>
-
-            {locations.map((location) => (
-              <View key={location.id} style={styles.stationCard}>
-                <Icon name="flash-outline" size={28} color="#000" />
-                <View style={{ flex: 1, marginLeft: 10 }}>
-                  <Text style={styles.stationTitle}>
-                    Tên Trạm: {location.location_name || "Không rõ"}
-                  </Text>
-                  <Text style={styles.stationSubtitle}>
-                    Địa Chỉ:{" "}
-                    {location.address +
-                      " " +
-                      location.ward +
-                      " " +
-                      location.district +
-                      " " +
-                      location.city || "Chưa có vị trí"}
-                  </Text>
+      {!location ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
+            <ScrollView contentContainerStyle={{ padding: 0 }}>
+              <View style={styles.section}>
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>Danh Sách Trạm Sạc</Text>
                 </View>
-                <TouchableOpacity>
-                  <Text
-                    style={styles.detailText}
-                    onPress={() =>
-                      router.push({
-                        pathname: "/LocationScreen",
-                        params: { location_id: location.id },
-                      })
-                    }
-                  >
-                    Xem Chi Tiết
-                  </Text>
-                </TouchableOpacity>
               </View>
-            ))}
+              <View style={{ padding: 5, paddingBottom: 10 }}>
+                <View style={styles.searchContainer}>
+                  <TextInput
+                    style={styles.searchInput}
+                    placeholder="Tìm Kiếm........."
+                    value={search}
+                    onChangeText={setSearch}
+                  />
+                  <Ionicons
+                    name="filter"
+                    size={20}
+                    color="#000"
+                    style={styles.filterIcon}
+                  />
+                </View>
+              </View>
+              <FlatList
+                data={filteredStations}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => <LocationCard {...item} />}
+                contentContainerStyle={{ paddingBottom: 15 }}
+              />
+            </ScrollView>
+          </SafeAreaView>
+          <View style={styles.footer}>
+            <BottomNav />
           </View>
-        </ScrollView>
-      </SafeAreaView>
-      <View style={styles.footer}>
-        <BottomNav />
-      </View>
+        </>
+      )}
     </View>
   );
 };
@@ -94,7 +99,7 @@ const LocationListScreen = () => {
 export default LocationListScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fefefe" },
+  container: { flex: 1, padding: 10, backgroundColor: "#fefefe" },
   header: {
     backgroundColor: "#64C2CD",
     padding: 20,
@@ -103,6 +108,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    backgroundColor: "#fff",
+    paddingBottom: 0,
+  },
+  searchInput: { flex: 1, height: 40, padding: 10 },
+  filterIcon: { marginLeft: 8 },
   avatar: { width: 50, height: 50, borderRadius: 25, marginRight: 10 },
   welcomeText: { fontSize: 18, fontWeight: "bold", color: "#072541" },
   menuContainer: {
@@ -117,11 +133,11 @@ const styles = StyleSheet.create({
   menuItem: { alignItems: "center" },
   menuText: { fontSize: 12, marginTop: 4 },
   content: { paddingBottom: 0 },
-  section: { marginBottom: 20 },
+  section: { marginBottom: 0 },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginBottom: 5,
   },
   sectionTitle: { fontWeight: "bold", fontSize: 16 },
   viewAll: { fontSize: 12, color: "#007AFF" },

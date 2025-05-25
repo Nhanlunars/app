@@ -1,12 +1,51 @@
+import { useAuth } from "@/app/AuthContext";
+import { useRouter } from "expo-router";
+
 import {
   Ionicons,
   MaterialCommunityIcons,
   MaterialIcons,
 } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Alert,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import BottomNav from "./BottomNav";
+
 const SettingScreen = () => {
+  const { logout } = useAuth();
+  const { userInfo } = useAuth();
+  const router = useRouter();
+  const handleLogout = async () => {
+    if (Platform.OS === "web") {
+      const confirmed = window.confirm("Bạn có chắc muốn đăng xuất?");
+      if (confirmed) {
+        await logout();
+        router.replace("/LoginScreen");
+      }
+    } else {
+      Alert.alert(
+        "Xác nhận",
+        "Bạn có chắc muốn đăng xuất?",
+        [
+          { text: "Huỷ", style: "cancel" },
+          {
+            text: "Đăng Xuất",
+            onPress: async () => {
+              await logout();
+              router.replace("/LoginScreen");
+            },
+          },
+        ],
+        { cancelable: true }
+      );
+    }
+  };
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -15,9 +54,11 @@ const SettingScreen = () => {
       {/* Avatar + Name */}
       <View style={styles.profileContainer}>
         <View style={styles.avatar}>
-          <Text style={styles.avatarText}>A</Text>
+          <Text style={styles.avatarText}>{userInfo?.lastName.charAt(0)}</Text>
         </View>
-        <Text style={styles.userName}>Nguyễn Văn Anh</Text>
+        <Text style={styles.userName}>
+          {userInfo?.firstName} {userInfo?.lastName}
+        </Text>
       </View>
 
       {/* Menu */}
@@ -42,7 +83,7 @@ const SettingScreen = () => {
             <MaterialCommunityIcons name="logout" size={20} color="black" />
           }
           label="Đăng Xuất"
-          onPress={() => console.log("Đăng xuất")}
+          onPress={handleLogout}
         />
       </View>
 

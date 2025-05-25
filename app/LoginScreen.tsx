@@ -1,4 +1,5 @@
 // app/screens/LoginScreen.tsx
+import { useAuth } from "@/app/AuthContext";
 import axios from "@/axios";
 import { Ionicons } from "@expo/vector-icons";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -17,46 +18,69 @@ const router = useRouter();
 type RootStackParamList = {
   Register: undefined;
 };
-//const navigation = useNavigation();
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function LoginScreen() {
-  //const navigation = useNavigation<NavigationProp>();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [secureText, setSecureText] = useState(true);
   const [errMessage, setErrMassage] = useState("");
-  //http://172.30.192.1:8080
+  const { login } = useAuth();
+  // const handleLogin = async () => {
+  //   //console.log(email, password);
+  //   if (!email || !password) {
+  //     Alert.alert("Lỗi", "Vui lòng nhập đầy đủ email và mật khẩu");
+  //     return;
+  //   }
+
+  //   try {
+  //     const data = await axios.post("/api/login", {
+  //       email,
+  //       password,
+  //     });
+
+  //     //console.group(data);
+
+  //     if (data.data && data.data.errCode == 0) {
+  //       // alert(data.data.message);
+  //       // navigation.navigate('Register');
+  //       router.push("/HomeScreen");
+  //     } else {
+  //       //alert("Lỗi, " + data.data.message + " Đăng nhập thất bại");
+  //       console.log("lõiooo", data.data.message);
+  //       setErrMassage(data.data.message);
+  //     }
+  //   } catch (e) {
+  //     console.log("log e", e);
+  //   }
+  // };
   const handleLogin = async () => {
-    //console.log(email, password);
     if (!email || !password) {
       Alert.alert("Lỗi", "Vui lòng nhập đầy đủ email và mật khẩu");
       return;
     }
 
     try {
-      const data = await axios.post("/api/login", {
+      const response = await axios.post("/api/login", {
         email,
         password,
       });
 
-      //console.group(data);
-
-      if (data.data && data.data.errCode == 0) {
-        // alert(data.data.message);
-        // navigation.navigate('Register');
-        router.push("/HomeScreen");
+      const resData = response.data;
+      console.log(resData);
+      if (resData && resData.errCode === 0) {
+        const { token, user } = resData;
+        await login(token, user);
+        router.replace("/HomeScreen");
       } else {
-        //alert("Lỗi, " + data.data.message + " Đăng nhập thất bại");
-        console.log("lõiooo", data.data.message);
-        setErrMassage(data.data.message);
+        setErrMassage(resData.message || "Đăng nhập thất bại");
       }
     } catch (e) {
       console.log("log e", e);
+      setErrMassage("Có lỗi xảy ra. Vui lòng thử lại.");
     }
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.header}>

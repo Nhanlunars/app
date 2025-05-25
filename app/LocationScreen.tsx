@@ -1,35 +1,38 @@
 import axios from "@/axios";
+import ChargerCard from "@/components/ChargerCard";
+import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  FlatList,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
+  TextInput,
   View,
 } from "react-native";
-import Icon from "react-native-vector-icons/Ionicons";
 import BottomNav from "./BottomNav";
 const router = useRouter();
+type Location = {
+  id: number;
+  location_name: string;
+  address: string;
+  ward: string;
+  district: string;
+  city: string;
+};
+type Charger = {
+  id: number;
+  charger_name: string;
+  location: Location;
+  last_maintence_date: string;
+  installation_date: string;
+};
 const LocationScreen = () => {
-  type Location = {
-    id: number;
-    location_name: string;
-    address?: string;
-    ward?: string;
-    district?: string;
-    city?: string;
-  };
-  type Charger = {
-    id: number;
-    charger_name: string;
-    location: Location;
-    last_maintence_date: string;
-    installation_date: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+  const [chargers, setChargers] = useState<Charger[]>([]);
+  const [locations, setLocations] = useState<Location>();
+  const [search, setSearch] = useState("");
   const { location_id } = useLocalSearchParams();
 
   const getChargerByLocation = async () => {
@@ -49,19 +52,27 @@ const LocationScreen = () => {
   useEffect(() => {
     getChargerByLocation();
   }, []);
-  const [chargers, setChargers] = useState<Charger[]>([]);
-  const [locations, setLocations] = useState<Location[]>([]);
+
+  const filteredChargers = chargers.filter((charger) => {
+    const matchSearch = charger.charger_name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+    return matchSearch;
+  });
 
   return (
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
         <ScrollView contentContainerStyle={{ padding: 10 }}>
-          <View style={styles.section}>
-            {chargers.length === 0 ? (
-              <>
+          {!locations ? (
+            <p>Loading....</p>
+          ) : (
+            <>
+              <View style={styles.section}>
                 <View style={styles.sectionHeader}>
                   <Text style={styles.sectionTitle}>
-                    Trạm Sạc: {location.location_name}
+                    Trạm Sạc: {locations.location_name}
                   </Text>
                 </View>
                 <Text style={styles.stationTitle}>
@@ -74,68 +85,37 @@ const LocationScreen = () => {
                     " " +
                     locations.city || "Không rõ"}
                 </Text>
-                <Text style={styles.sectionTitle}>Không có trạm sạc nào.</Text>
-              </>
-            ) : (
-              ""
-            )}
-
-            {chargers.map((charger, index) => (
-              <View key={charger.id}>
-                {index === 0 && (
-                  <>
-                    <View style={styles.sectionHeader}>
-                      <Text style={styles.sectionTitle}>
-                        Trạm Sạc {charger.location.location_name}
-                      </Text>
-                    </View>
-                    <Text style={styles.stationTitle}>
-                      Địa Chỉ:{" "}
-                      {charger.location.address +
-                        " " +
-                        charger.location.ward +
-                        " " +
-                        charger.location.district +
-                        " " +
-                        charger.location.city || "Không rõ"}
-                    </Text>
-                    <br />
-                  </>
-                )}
-
-                <View style={styles.stationCard}>
-                  <Icon name="flash-outline" size={28} color="#000" />
-                  <View style={{ flex: 1, marginLeft: 10 }}>
-                    <Text style={styles.stationTitle}>
-                      Tên Trụ: {charger.charger_name || "Không rõ"}
-                    </Text>
-                    <Text style={styles.stationSubtitle}>
-                      Ngày lắp đặt:
-                      {new Date(
-                        charger.installation_date
-                      ).toLocaleDateString() || "Không rõ"}
-                    </Text>
-                    <Text style={styles.stationSubtitle}>
-                      Ngày bảo trì:{" "}
-                      {new Date(
-                        charger.last_maintence_date
-                      ).toLocaleDateString() || "Không rõ"}
-                    </Text>
-                  </View>
-                  <TouchableOpacity
-                    onPress={() =>
-                      router.push({
-                        pathname: "/ChargerScreen",
-                        params: { charger_id: charger.id },
-                      })
-                    }
-                  >
-                    <Text style={styles.detailText}>Xem Chi Tiết</Text>
-                  </TouchableOpacity>
+                <View style={styles.searchContainer}>
+                  <TextInput
+                    style={styles.searchInput}
+                    placeholder="Tìm Kiếm........."
+                    value={search}
+                    onChangeText={setSearch}
+                  />
+                  <Ionicons
+                    name="filter"
+                    size={20}
+                    color="#000"
+                    style={styles.filterIcon}
+                  />
                 </View>
               </View>
-            ))}
-          </View>
+              {chargers.length === 0 ? (
+                <>
+                  <Text style={styles.sectionTitle}>
+                    Không có trạm sạc nào.
+                  </Text>
+                </>
+              ) : (
+                <FlatList
+                  data={filteredChargers}
+                  keyExtractor={(item) => item.id.toString()}
+                  renderItem={({ item }) => <ChargerCard {...item} />}
+                  contentContainerStyle={{ paddingBottom: 100 }}
+                />
+              )}
+            </>
+          )}
         </ScrollView>
       </SafeAreaView>
       <View style={styles.footer}>
@@ -171,7 +151,7 @@ const styles = StyleSheet.create({
   menuItem: { alignItems: "center" },
   menuText: { fontSize: 12, marginTop: 4 },
   content: { paddingBottom: 0 },
-  section: { marginBottom: 20 },
+  section: { marginBottom: 10 },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -187,7 +167,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 10,
   },
-  stationTitle: { fontSize: 13, fontWeight: "bold", marginBottom: 2 },
+  stationTitle: { fontSize: 13, fontWeight: "bold", marginBottom: 10 },
   stationSubtitle: { fontSize: 12, color: "#333" },
   detailText: { color: "#007AFF", fontSize: 12 },
   reviewRow: { flexDirection: "row", justifyContent: "space-around" },
@@ -202,4 +182,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
   },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    backgroundColor: "#fff",
+  },
+  searchInput: { flex: 1, height: 40 },
+  filterIcon: { marginLeft: 8 },
 });
