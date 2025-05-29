@@ -61,7 +61,7 @@ const HomeScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
-        <ScrollView contentContainerStyle={{ padding: 10 }}>
+        <ScrollView contentContainerStyle={{ padding: 3 }}>
           <View style={styles.header}>
             <Image
               source={require("@/assets/images/icon.png")} // hình avatar người dùng
@@ -71,7 +71,10 @@ const HomeScreen = ({ navigation }: Props) => {
           </View>
 
           <View style={styles.menuContainer}>
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => router.push("/MapLocation")}
+            >
               <Icon name="map-outline" size={24} color="#000" />
               <Text style={styles.menuText}>Map</Text>
             </TouchableOpacity>
@@ -88,11 +91,11 @@ const HomeScreen = ({ navigation }: Props) => {
           {/* <ScrollView style={styles.content}> */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Danh Sách Trạm Sạc</Text>
+              <Text style={styles.sectionTitle}> Danh Sách Trạm Sạc</Text>
               <TouchableOpacity
                 onPress={() => router.push("/LocationListScreen")}
               >
-                <Text style={styles.viewAll}>Xem Tất Cả</Text>
+                <Text style={styles.viewAll}>Xem Tất Cả </Text>
               </TouchableOpacity>
             </View>
             {!locations ? (
@@ -212,10 +215,10 @@ const styles = StyleSheet.create({
   reviewRow: { flexDirection: "row", justifyContent: "space-around" },
   reviewCard: {
     backgroundColor: "#D9D9D9",
-    padding: 10,
+    padding: 8,
     borderRadius: 8,
     alignItems: "center",
-    width: "45%",
+    width: "48%",
   },
   footer: {
     flexDirection: "row",

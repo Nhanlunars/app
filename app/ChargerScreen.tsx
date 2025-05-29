@@ -74,65 +74,64 @@ const ChargerListScreen = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
-        <ScrollView contentContainerStyle={{ padding: 10 }}>
+        {/* <ScrollView contentContainerStyle={{ padding: 10 }}> */}
           {!chargers ? (
-            <p>Loading....</p>
+            <Text>Loading....</Text>
           ) : (
             <>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>
-                Trụ Sạc: {chargers.charger_name}
-              </Text>
-            </View>
-             <View style={styles.searchContainer}>
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Tìm Kiếm........."
-              value={search}
-              onChangeText={setSearch}
-            />
-            <Ionicons
-              name="filter"
-              size={20}
-              color="#000"
-              style={styles.filterIcon}
-            />
-          </View>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}>
+                  {' '}Trụ Sạc: {chargers.charger_name}
+                </Text>
+              </View>
+              <View style={styles.searchContainer}>
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Tìm Kiếm........."
+                  value={search}
+                  onChangeText={setSearch}
+                />
+                <Ionicons
+                  name="filter"
+                  size={20}
+                  color="#000"
+                  style={styles.filterIcon}
+                />
+              </View>
 
-          {/* Tabs */}
-          <View style={styles.tabs}>
-            <TouchableOpacity
-              style={[styles.tab, filterTab === "all" && styles.activeTab]}
-              onPress={() => setFilterTab("all")}
-            >
-              <Text style={styles.tabText}>Tất Cả</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.tab, filterTab === "S1" && styles.activeTab]}
-              onPress={() => setFilterTab("S1")}
-            >
-              <Text style={styles.tabText}>Đang Sử Dụng</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.tab, filterTab === "S4" && styles.activeTab]}
-              onPress={() => setFilterTab("S4")}
-            >
-              <Text style={styles.tabText}>Đang Sử Dụng</Text>
-            </TouchableOpacity>
-          </View>
+              {/* Tabs */}
+              <View style={styles.tabs}>
+                <TouchableOpacity
+                  style={[styles.tab, filterTab === "all" && styles.activeTab]}
+                  onPress={() => setFilterTab("all")}
+                >
+                  <Text style={styles.tabText}>Tất Cả</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.tab, filterTab === "S1" && styles.activeTab]}
+                  onPress={() => setFilterTab("S1")}
+                >
+                  <Text style={styles.tabText}>Đang Sử Dụng</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[styles.tab, filterTab === "S4" && styles.activeTab]}
+                  onPress={() => setFilterTab("S4")}
+                >
+                  <Text style={styles.tabText}>Đang Sử Dụng</Text>
+                </TouchableOpacity>
+              </View>
 
-          {/* Station List */}
-          <FlatList
-            data={filteredTypes}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => <TypeCard {...item} />}
-            contentContainerStyle={{ paddingBottom: 100 }}
-          />
-</>
+              {/* Station List */}
+              <FlatList
+                data={filteredTypes}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => <TypeCard {...item} />}
+                contentContainerStyle={{ paddingBottom: 100 }}
+              />
+            </>
           )}
           {/* Search Bar */}
-         
-        </ScrollView>
+        {/* </ScrollView> */}
       </SafeAreaView>
       <View style={styles.footer}>
         <BottomNav />
@@ -144,7 +143,7 @@ const ChargerListScreen = () => {
 export default ChargerListScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 10, backgroundColor: "#fefefe" },
+  container: { flex: 1,  backgroundColor: "#fefefe" },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",

@@ -26,7 +26,7 @@ const BottomNav = () => {
             size={24}
             color="#000"
           />
-          <Text style={styles.navLabel}>Charge</Text>
+          <Text style={styles.navLabel}>Charger</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   mainText: {
     fontSize: 14,
-    marginBottom: 10,
+    marginBottom: 1,
     lineHeight: 20,
   },
   note: {
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    paddingBottom: 10,
+    paddingBottom: 1,
   },
   navItem: {
     alignItems: "center",

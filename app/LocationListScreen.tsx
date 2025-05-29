@@ -57,10 +57,10 @@ const LocationListScreen = () => {
       ) : (
         <>
           <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
-            <ScrollView contentContainerStyle={{ padding: 0 }}>
+            {/* <ScrollView contentContainerStyle={{ padding: 0 }}> */}
               <View style={styles.section}>
                 <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}>Danh Sách Trạm Sạc</Text>
+                  <Text style={styles.sectionTitle}> Danh Sách Trạm Sạc</Text>
                 </View>
               </View>
               <View style={{ padding: 5, paddingBottom: 10 }}>
@@ -85,7 +85,7 @@ const LocationListScreen = () => {
                 renderItem={({ item }) => <LocationCard {...item} />}
                 contentContainerStyle={{ paddingBottom: 15 }}
               />
-            </ScrollView>
+            {/* </ScrollView> */}
           </SafeAreaView>
           <View style={styles.footer}>
             <BottomNav />
@@ -99,7 +99,7 @@ const LocationListScreen = () => {
 export default LocationListScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 10, backgroundColor: "#fefefe" },
+  container: { flex: 1, backgroundColor: "#fefefe" },
   header: {
     backgroundColor: "#64C2CD",
     padding: 20,

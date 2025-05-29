@@ -86,6 +86,14 @@ function RootLayoutNav() {
             options={{ headerShown: false }}
           />
           <Stack.Screen name="ChargerScreen" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="MapLocation.native"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="MapLocation.web"
+            options={{ headerShown: false }}
+          />
         </>
       )}
     </Stack>

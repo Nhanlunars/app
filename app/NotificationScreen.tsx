@@ -1,16 +1,52 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { useAuth } from "@/app/AuthContext";
+import axios from "@/axios";
+import { useRouter } from "expo-router";
+
+import React, { useEffect, useState } from "react";
+import { FlatList, SafeAreaView,
+  ScrollView,StyleSheet, Text, View } from "react-native";
+const router = useRouter();
+
+import NoticeCard from "@/components/NoticeCard";
 import BottomNav from "./BottomNav";
+
+type Notice = {
+  id: number;
+  title: string;
+  message: string;
+};
 const NotificationScreen = () => {
+  const { userInfo } = useAuth();
+  const [notices, setNotices] = useState<Notice[]>([]);
+  const getNotice = async () => {
+    try {
+      const response = await axios.get(
+        `/api/get-all-notification-by-userid?user_id=${userInfo?.id}`
+      );
+      setNotices(response.data.notifications);
+      console.log("notice", response.data.notifications);
+      console.log("id", userInfo?.id);
+    } catch (error) {
+      console.error("Error loading notices:", error);
+    }
+  };
+  useEffect(() => {
+    if (userInfo?.id) {
+      getNotice();
+    }
+  }, [userInfo?.id]);
+  
   return (
     <View style={styles.container}>
       {/* Header */}
+      <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
+              {/* <ScrollView contentContainerStyle={{ padding: 10 }}> */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Thông Báo</Text>
       </View>
 
       {/* Notification */}
-      <View style={styles.notificationContainer}>
+      {/* <View style={styles.notificationContainer}>
         <Text style={styles.mainText}>
           Bạn Đã Đặt Lịch Trạm Sạc Thành Công{"\n"}
           Tại Cửa Hàng Xăng Dầu Ở Trụ Số 001{"\n"}
@@ -20,51 +56,19 @@ const NotificationScreen = () => {
         </Text>
         <View style={styles.divider} />
         <Text style={styles.timeText}>10:00 05/04/2025</Text>
-      </View>
-
-      {/* Bottom Navigation */}
-      {/* <View style={styles.bottomNav}>
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => router.push("/")}
-        >
-          <Ionicons name="home" size={24} color="#000" />
-          <Text style={styles.navLabel}>Home</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => router.push("/StationListScreen")}
-        >
-          <MaterialCommunityIcons
-            name="battery-charging"
-            size={24}
-            color="#000"
-          />
-          <Text style={styles.navLabel}>Charge</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => router.push("/NotificationScreen")}
-        >
-          <Ionicons name="notifications-outline" size={24} color="#000" />
-          <Text style={styles.navLabel}>Notification</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.navItem}
-          onPress={() => router.push("/SettingScreen")}
-        >
-          <Ionicons name="settings-outline" size={24} color="#000" />
-          <Text style={styles.navLabel}>Setting</Text>
-        </TouchableOpacity>
       </View> */}
-      {/* <View style={styles.bottomNav}>
-        {/* <Footer /> *
-        {/* <BottomNav /> 
-      </View> */}
-      <BottomNav />
+      <FlatList
+        data={notices}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <NoticeCard {...item} />}
+        contentContainerStyle={{ paddingBottom: 10 }}
+      />
+      
+      {/* </ScrollView> */}
+            </SafeAreaView>
+            <View style={styles.footer}>
+              <BottomNav />
+            </View>
     </View>
   );
 };
@@ -132,5 +136,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 4,
     color: "#000",
+  },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
 });

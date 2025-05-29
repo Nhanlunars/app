@@ -64,19 +64,19 @@ const LocationScreen = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
-        <ScrollView contentContainerStyle={{ padding: 10 }}>
+        {/* <ScrollView contentContainerStyle={{ padding: 10 }}> */}
           {!locations ? (
-            <p>Loading....</p>
+            <Text>Loading....</Text>
           ) : (
             <>
               <View style={styles.section}>
                 <View style={styles.sectionHeader}>
                   <Text style={styles.sectionTitle}>
-                    Trạm Sạc: {locations.location_name}
+                      {' '}Trạm Sạc: {locations.location_name}
                   </Text>
                 </View>
                 <Text style={styles.stationTitle}>
-                  Địa Chỉ:{" "}
+                  {' '}Địa Chỉ:{" "}
                   {locations.address +
                     " " +
                     locations.ward +
@@ -103,7 +103,7 @@ const LocationScreen = () => {
               {chargers.length === 0 ? (
                 <>
                   <Text style={styles.sectionTitle}>
-                    Không có trạm sạc nào.
+                    {' '}Không có trạm sạc nào.
                   </Text>
                 </>
               ) : (
@@ -116,7 +116,7 @@ const LocationScreen = () => {
               )}
             </>
           )}
-        </ScrollView>
+        {/* </ScrollView> */}
       </SafeAreaView>
       <View style={styles.footer}>
         <BottomNav />

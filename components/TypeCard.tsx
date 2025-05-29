@@ -18,7 +18,7 @@ const getStatusInfo = (status: string) => {
     case "S1":
       return { text: "Đang bảo trì", color: "red" };
     case "S2":
-      return { text: "Đã được đặt trước", color: "yellow" };
+      return { text: "Đã được đặt trước", color: "orange" };
     case "S3":
       return { text: "Đang sạc", color: "blue" };
     default:
@@ -34,17 +34,18 @@ const TypeCard = ({
   status,
 }: StationProps) => {
   const { text: statusText, color: statusColor } = getStatusInfo(status);
+  console.log(id);
   return (
     <View style={styles.card}>
       <Text style={styles.title}>Loại Sạc: {type_name}</Text>
       <View style={styles.infoRow}>
         <MaterialCommunityIcons name="ev-station" size={24} color="black" />
         <View style={styles.textInfo}>
-          <Text>Giá tiền: {default_price}</Text>
+          <Text>Giá tiền: {Number(default_price).toLocaleString("vi-VN")}</Text>
           <Text>Mô tả: {describe}</Text>
           <Text>
             Trạng Thái: <Text style={{ color: statusColor }}>{statusText}</Text>
-          </Text>{" "}
+          </Text>
         </View>
         <TouchableOpacity
           onPress={() =>

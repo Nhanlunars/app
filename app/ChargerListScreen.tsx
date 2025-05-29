@@ -62,8 +62,13 @@ const ChargerListScreen = () => {
   return (
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
-        <ScrollView contentContainerStyle={{ padding: 10 }}>
+        {/* <ScrollView contentContainerStyle={{ padding: 10 }}> */}
           {/* Search Bar */}
+          <View style={styles.section}>
+                          <View style={styles.sectionHeader}>
+                            <Text style={styles.sectionTitle}>Danh Sách Trạm Sạc</Text>
+                          </View>
+                        </View>
           <View style={styles.searchContainer}>
             <TextInput
               style={styles.searchInput}
@@ -126,7 +131,7 @@ const ChargerListScreen = () => {
               </TouchableOpacity>
             </View>
           ))} */}
-        </ScrollView>
+        {/* </ScrollView> */}
       </SafeAreaView>
       <View style={styles.footer}>
         <BottomNav />
@@ -138,7 +143,7 @@ const ChargerListScreen = () => {
 export default ChargerListScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 10, backgroundColor: "#fefefe" },
+  container: { flex: 1, backgroundColor: "#fefefe" },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -147,6 +152,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "#fff",
   },
+   section: { marginBottom: 0 },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 5,
+  },
+  sectionTitle: { fontWeight: "bold", fontSize: 16 },
   searchInput: { flex: 1, height: 40 },
   filterIcon: { marginLeft: 8 },
   tabs: {

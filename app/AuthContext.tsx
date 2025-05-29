@@ -3,7 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface UserInfo {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -36,10 +36,22 @@ const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   // }, []);
 
   const login = async (token: string, info: UserInfo) => {
-  await AsyncStorage.setItem("userToken", token);
-  await AsyncStorage.setItem("userInfo", JSON.stringify(info));
-  setUserToken(token);
-  setUserInfo(info);
+  // await AsyncStorage.setItem("userToken", token);
+  // await AsyncStorage.setItem("userInfo", JSON.stringify(info));
+  // setUserToken(token);
+  // setUserInfo(info);
+   if (!token) {
+    console.warn("Login called with undefined or null token");
+    return;
+  }
+  try {
+    await AsyncStorage.setItem("userToken", token);
+    await AsyncStorage.setItem("userInfo", JSON.stringify(info));
+    setUserToken(token);
+    setUserInfo(info);
+  } catch (error) {
+    console.error("Error storing login data:", error);
+  }
 };
 
   const logout = async () => {
