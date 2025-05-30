@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import {
   FlatList,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -63,52 +62,58 @@ const ChargerListScreen = () => {
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
         {/* <ScrollView contentContainerStyle={{ padding: 10 }}> */}
-          {/* Search Bar */}
-          <View style={styles.section}>
-                          <View style={styles.sectionHeader}>
-                            <Text style={styles.sectionTitle}>Danh Sách Trạm Sạc</Text>
-                          </View>
-                        </View>
-          <View style={styles.searchContainer}>
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Tìm Kiếm........."
-              value={search}
-              onChangeText={setSearch}
-            />
-            <Ionicons
-              name="filter"
-              size={20}
-              color="#000"
-              style={styles.filterIcon}
-            />
+        {/* Search Bar */}
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Danh Sách Trụ Sạc</Text>
+        </View>
+        {/* <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Danh Sách Trạm Sạc</Text>
           </View>
-
-          {/* Tabs */}
-          <View style={styles.tabs}>
-            <TouchableOpacity
-              style={[styles.tab, filterTab === "all" && styles.activeTab]}
-              onPress={() => setFilterTab("all")}
-            >
-              <Text style={styles.tabText}>Tất Cả</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.tab, filterTab === "in_use" && styles.activeTab]}
-              onPress={() => setFilterTab("in_use")}
-            >
-              <Text style={styles.tabText}>Đang Sử Dụng</Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Charger List */}
-          <FlatList
-            data={filteredChargers}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => <ChargerCard {...item} />}
-            contentContainerStyle={{ paddingBottom: 10 }}
+        </View> */}
+                    <View style={{ padding: 5, paddingBottom: 10 }}>
+        
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Tìm Kiếm........."
+            value={search}
+            onChangeText={setSearch}
           />
+          <Ionicons
+            name="filter"
+            size={20}
+            color="#000"
+            style={styles.filterIcon}
+          />
+        </View>
+            </View>
 
-          {/* {chargers.map((charger) => (
+        {/* Tabs */}
+        <View style={styles.tabs}>
+          <TouchableOpacity
+            style={[styles.tab, filterTab === "all" && styles.activeTab]}
+            onPress={() => setFilterTab("all")}
+          >
+            <Text style={styles.tabText}>Tất Cả</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, filterTab === "in_use" && styles.activeTab]}
+            onPress={() => setFilterTab("in_use")}
+          >
+            <Text style={styles.tabText}>Đang Sử Dụng</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Charger List */}
+        <FlatList
+          data={filteredChargers}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => <ChargerCard {...item} />}
+          contentContainerStyle={{ paddingBottom: 10 }}
+        />
+
+        {/* {chargers.map((charger) => (
             <View key={charger.id} style={styles.stationCard}>
               <Icon name="flash-outline" size={28} color="#000" />
               <View style={{ flex: 1, marginLeft: 10 }}>
@@ -152,7 +157,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     backgroundColor: "#fff",
   },
-   section: { marginBottom: 0 },
+  header: {
+    backgroundColor: "#57d2d2",
+    padding: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  section: { marginBottom: 0 },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",

@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import {
   FlatList,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -67,7 +66,7 @@ const ChargerListScreen = () => {
     const matchSearch = type.type_name
       .toLowerCase()
       .includes(search.toLowerCase());
-    const matchStatus = filterTab === "all" ? true : type.status !== filterTab;
+    const matchStatus = filterTab === "all" ? true : type.status === filterTab;
     return matchSearch && matchStatus;
   });
 
@@ -75,15 +74,21 @@ const ChargerListScreen = () => {
     <View style={styles.container}>
       <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
         {/* <ScrollView contentContainerStyle={{ padding: 10 }}> */}
-          {!chargers ? (
-            <Text>Loading....</Text>
-          ) : (
-            <>
-              <View style={styles.sectionHeader}>
+        {!chargers ? (
+          <Text>Loading....</Text>
+        ) : (
+          <>
+            <View style={styles.header}>
+              <Text style={styles.headerText}>
+                Trụ Sạc : {chargers.charger_name}
+              </Text>
+            </View>
+            {/* <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>
                   {' '}Trụ Sạc: {chargers.charger_name}
                 </Text>
-              </View>
+              </View> */}
+            <View style={{ padding: 5, paddingBottom: 10 }}>
               <View style={styles.searchContainer}>
                 <TextInput
                   style={styles.searchInput}
@@ -98,39 +103,40 @@ const ChargerListScreen = () => {
                   style={styles.filterIcon}
                 />
               </View>
+            </View>
 
-              {/* Tabs */}
-              <View style={styles.tabs}>
-                <TouchableOpacity
-                  style={[styles.tab, filterTab === "all" && styles.activeTab]}
-                  onPress={() => setFilterTab("all")}
-                >
-                  <Text style={styles.tabText}>Tất Cả</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.tab, filterTab === "S1" && styles.activeTab]}
-                  onPress={() => setFilterTab("S1")}
-                >
-                  <Text style={styles.tabText}>Đang Sử Dụng</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.tab, filterTab === "S4" && styles.activeTab]}
-                  onPress={() => setFilterTab("S4")}
-                >
-                  <Text style={styles.tabText}>Đang Sử Dụng</Text>
-                </TouchableOpacity>
-              </View>
+            {/* Tabs */}
+            <View style={styles.tabs}>
+              <TouchableOpacity
+                style={[styles.tab, filterTab === "all" && styles.activeTab]}
+                onPress={() => setFilterTab("all")}
+              >
+                <Text style={styles.tabText}>Tất Cả</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.tab, filterTab === "S1" && styles.activeTab]}
+                onPress={() => setFilterTab("S1")}
+              >
+                <Text style={styles.tabText}>Đang Bảo Trì</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.tab, filterTab === "S4" && styles.activeTab]}
+                onPress={() => setFilterTab("S4")}
+              >
+                <Text style={styles.tabText}>Đang Sẵn sàng</Text>
+              </TouchableOpacity>
+            </View>
 
-              {/* Station List */}
-              <FlatList
-                data={filteredTypes}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => <TypeCard {...item} />}
-                contentContainerStyle={{ paddingBottom: 100 }}
-              />
-            </>
-          )}
-          {/* Search Bar */}
+            {/* Station List */}
+            <FlatList
+              data={filteredTypes}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => <TypeCard {...item} />}
+              contentContainerStyle={{ paddingBottom: 100 }}
+            />
+          </>
+        )}
+        {/* Search Bar */}
         {/* </ScrollView> */}
       </SafeAreaView>
       <View style={styles.footer}>
@@ -143,7 +149,7 @@ const ChargerListScreen = () => {
 export default ChargerListScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1,  backgroundColor: "#fefefe" },
+  container: { flex: 1, backgroundColor: "#fefefe" },
   searchContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -151,6 +157,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 10,
     backgroundColor: "#fff",
+  },
+  header: {
+    backgroundColor: "#57d2d2",
+    padding: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
   searchInput: { flex: 1, height: 40 },
   filterIcon: { marginLeft: 8 },

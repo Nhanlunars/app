@@ -7,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import {
   FlatList,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -53,38 +52,41 @@ const LocationListScreen = () => {
   return (
     <View style={styles.container}>
       {!location ? (
-        <p>Loading...</p>
+        <Text>Loading...</Text>
       ) : (
         <>
           <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
             {/* <ScrollView contentContainerStyle={{ padding: 0 }}> */}
-              <View style={styles.section}>
-                <View style={styles.sectionHeader}>
-                  <Text style={styles.sectionTitle}> Danh Sách Trạm Sạc</Text>
-                </View>
+            <View style={styles.header}>
+              <Text style={styles.headerText}> Danh Sách Trạm Sạc</Text>
+            </View>
+            {/* <View style={styles.section}>
+              <View style={styles.sectionHeader}>
+                <Text style={styles.sectionTitle}> Danh Sách Trạm Sạc</Text>
               </View>
-              <View style={{ padding: 5, paddingBottom: 10 }}>
-                <View style={styles.searchContainer}>
-                  <TextInput
-                    style={styles.searchInput}
-                    placeholder="Tìm Kiếm........."
-                    value={search}
-                    onChangeText={setSearch}
-                  />
-                  <Ionicons
-                    name="filter"
-                    size={20}
-                    color="#000"
-                    style={styles.filterIcon}
-                  />
-                </View>
+            </View> */}
+            <View style={{ padding: 5, paddingBottom: 10 }}>
+              <View style={styles.searchContainer}>
+                <TextInput
+                  style={styles.searchInput}
+                  placeholder="Tìm Kiếm........."
+                  value={search}
+                  onChangeText={setSearch}
+                />
+                <Ionicons
+                  name="filter"
+                  size={20}
+                  color="#000"
+                  style={styles.filterIcon}
+                />
               </View>
-              <FlatList
-                data={filteredStations}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => <LocationCard {...item} />}
-                contentContainerStyle={{ paddingBottom: 15 }}
-              />
+            </View>
+            <FlatList
+              data={filteredStations}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => <LocationCard {...item} />}
+              contentContainerStyle={{ paddingBottom: 15 }}
+            />
             {/* </ScrollView> */}
           </SafeAreaView>
           <View style={styles.footer}>
@@ -101,12 +103,14 @@ export default LocationListScreen;
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fefefe" },
   header: {
-    backgroundColor: "#64C2CD",
-    padding: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    flexDirection: "row",
-    alignItems: "center",
+    backgroundColor: "#57d2d2",
+    padding: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
   searchContainer: {
     flexDirection: "row",
@@ -133,11 +137,17 @@ const styles = StyleSheet.create({
   menuItem: { alignItems: "center" },
   menuText: { fontSize: 12, marginTop: 4 },
   content: { paddingBottom: 0 },
-  section: { marginBottom: 0 },
+  section: {
+    marginBottom: 0,
+    backgroundColor: "#57d2d2",
+    height: 50,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
   sectionHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 5,
+    marginBottom: 15,
   },
   sectionTitle: { fontWeight: "bold", fontSize: 16 },
   viewAll: { fontSize: 12, color: "#007AFF" },

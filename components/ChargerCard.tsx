@@ -32,7 +32,7 @@ const ChargerCard = ({
 
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>Tên Trạm: {charger_name || "Không rõ"}</Text>
+      <Text style={styles.title}>Tên Trụ: {charger_name || "Không rõ"}</Text>
       <View style={styles.infoRow}>
         <MaterialCommunityIcons name="ev-station" size={24} color="black" />
         <View style={styles.textInfo}>

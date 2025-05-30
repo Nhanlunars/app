@@ -82,7 +82,7 @@ const HomeScreen = ({ navigation }: Props) => {
               <Icon name="qr-code-outline" size={24} color="#000" />
               <Text style={styles.menuText}>QR Code</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity style={styles.menuItem}   onPress={() => router.push("/HistoryListScreen")}>
               <Icon name="time-outline" size={24} color="#000" />
               <Text style={styles.menuText}>History</Text>
             </TouchableOpacity>
@@ -173,8 +173,10 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: "#64C2CD",
     padding: 20,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
     flexDirection: "row",
     alignItems: "center",
   },

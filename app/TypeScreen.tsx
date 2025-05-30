@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  Alert,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -67,6 +68,7 @@ const TypeScreen = () => {
   const [types, setTypes] = useState<Type | null>(null);
   const [resers, setResers] = useState<Reser | null>(null);
   const [hiss, setHiss] = useState<Reser | null>(null);
+    const [energy, setEnergy] = useState<number>(0);
   const [messages, setMessages] = useState("");
   const { type_id } = useLocalSearchParams();
   const getCharger = async () => {
@@ -118,7 +120,7 @@ const TypeScreen = () => {
     }
   };
   const endCharging = async () => {
-    if (!types?.energy && !types?.charger?.id && !types?.id) {
+    if ((energy == null) && !types?.charger?.id && !types?.id) {
       console.error("Missing type");
       return;
     }
@@ -137,7 +139,7 @@ const TypeScreen = () => {
         user_id: userInfo?.id,
         type_id: types?.id,
         end_time: new Date().toLocaleString(),
-        number_end: types?.energy,
+        number_end: energy,
         status: "S4",
       });
       // console.log("id", hiss?.id);
@@ -159,7 +161,7 @@ const TypeScreen = () => {
         message: `Bạn đã đặt lịch sạc thành công tại trạm sạc ${types?.charger.charger_name}, trụ sạc ${types?.type_name} với vào lúc ${bookingData.start_time}. Lưu ý: Sạc sẽ tự động hủy sau 20 phút.`,
       });
       // console.log("id", type_id);
-       console.log("repos", respon);
+      console.log("repos", respon);
     } catch (error) {
       console.error("Error create notice:", error);
     }
@@ -210,6 +212,23 @@ const TypeScreen = () => {
   useEffect(() => {
     getCharger(); // Gọi khi component mount
   }, []);
+  useEffect(() => {
+    const fetchEnergy = async () => {
+      try {
+        const response = await axios.get(`/api/get-all-type?id=${type_id}`);
+        setEnergy(response.data.types.energy);
+      } catch (error) {
+        console.error('Error fetching energy:', error);
+      }
+    };
+
+    fetchEnergy(); // Lấy lần đầu ngay khi mount
+
+    const intervalId = setInterval(fetchEnergy, 1000); // 1000 ms = 1 giây
+
+    // Cleanup khi component unmount
+    return () => clearInterval(intervalId);
+  }, []);
 
   useEffect(() => {
     if (userInfo?.id) {
@@ -230,7 +249,7 @@ const TypeScreen = () => {
         ...prev,
         type_id: types.id?.toString() ?? "",
         charger_id: types.charger.id?.toString() ?? "",
-        number_start: types.energy ? types.energy.toString() : "0", // đây là phần gây lỗi
+        number_start: energy ? energy.toString() : "0", // đây là phần gây lỗi
       }));
     }
   }, [types]);
@@ -332,7 +351,7 @@ const TypeScreen = () => {
                     <View style={styles.sectionHeader}>
                       <Text style={styles.sectionTitle}>
                         {" "}
-                        Chữ điện: {types?.energy}
+                        Chữ điện: {energy}
                       </Text>
                     </View>
                     <Text>
@@ -345,11 +364,29 @@ const TypeScreen = () => {
                     <TouchableOpacity
                       style={styles.bookButton}
                       onPress={() => {
-                        startCharging();
-                        router.push({
-                          pathname: "/TypeScreen",
-                          params: { type_id: type_id },
-                        });
+                        Alert.alert(
+                          "Xác nhận",
+                          "Bạn có muốn sạc?",
+                          [
+                            { text: "Huỷ", style: "cancel" },
+                            {
+                              text: "Sạc",
+                              onPress: async () => {
+                                await startCharging(); // Tạo thông báo
+                                router.push({
+                                  pathname: "/TypeScreen",
+                                  params: { type_id: type_id },
+                                });
+                              },
+                            },
+                          ],
+                          { cancelable: true }
+                        );
+                        // startCharging();
+                        // router.push({
+                        //   pathname: "/TypeScreen",
+                        //   params: { type_id: type_id },
+                        // });
                       }}
                     >
                       <Text style={styles.bookText}>Sạc</Text>
@@ -357,12 +394,31 @@ const TypeScreen = () => {
                     <TouchableOpacity
                       style={styles.bookButton}
                       onPress={() => {
-                        setTpye();
-                        cancel();
-                        router.push({
-                          pathname: "/TypeScreen",
-                          params: { type_id: type_id },
-                        });
+                        Alert.alert(
+                          "Xác nhận",
+                          "Bạn có muốn hủy sạc?",
+                          [
+                            { text: "Huỷ", style: "cancel" },
+                            {
+                              text: "Hủy Sạc",
+                              onPress: async () => {
+                                await setTpye(); // Tạo thông báo
+                                await cancel(); // Tạo thông báo
+                                router.push({
+                                  pathname: "/TypeScreen",
+                                  params: { type_id: type_id },
+                                });
+                              },
+                            },
+                          ],
+                          { cancelable: true }
+                        );
+                        // setTpye();
+                        // cancel();
+                        // router.push({
+                        //   pathname: "/TypeScreen",
+                        //   params: { type_id: type_id },
+                        // });
                       }}
                     >
                       <Text style={styles.bookText}>Hủy Sạc</Text>
@@ -394,7 +450,7 @@ const TypeScreen = () => {
                 <View style={styles.sectionHeader}>
                   <Text style={styles.sectionTitle}>
                     {" "}
-                    Chữ điện hiện tại: {types?.energy}
+                    Chữ điện hiện tại: {energy}
                   </Text>
                 </View>
 
@@ -417,18 +473,53 @@ const TypeScreen = () => {
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={styles.bookButton}
-                      onPress={() => {
-                        router.push({
+                      onPress={async () => {
+                        await router.push({
                           pathname: "/TypeScreen",
                           params: { type_id: type_id },
                         });
+                        const startTime = hiss?.start_time
+                          ? new Date(hiss.start_time).toLocaleString()
+                          : "Không có";
+                        const endTime = new Date().toLocaleString();
+                        const chuDien = parseFloat(
+                          (
+                            Number(energy ?? 0) -
+                            Number(hiss?.number_start ?? 0)
+                          ).toFixed(2)
+                        );
+                        const tien =
+                          Number(types?.default_price ?? 0) * chuDien;
 
-                        endCharging();
-                        done();
-                        router.push({
-                          pathname: "/TypeScreen",
-                          params: { type_id: type_id },
-                        });
+                        Alert.alert(
+                          "Xác nhận",
+                          "Bạn có muốn hoàn tất sạc?\n" +
+                            `Thời gian bắt đầu:${startTime}\n` +
+                            `Thời gian kết thúc:${endTime}\n` +
+                            `Tổng chữ điện: ${energy} - ${hiss?.number_start} = ${chuDien}\n` +
+                            `Tổng tiền: ${tien.toLocaleString("vi-VN")} VND`,
+                          [
+                            { text: "Huỷ", style: "cancel" },
+                            {
+                              text: "Hoàn Tất Sạc",
+                              onPress: async () => {
+                                await endCharging(); // Tạo thông báo
+                                await done(); // Tạo thông báo
+                                router.push({
+                                  pathname: "/TypeScreen",
+                                  params: { type_id: type_id },
+                                });
+                              },
+                            },
+                          ],
+                          { cancelable: true }
+                        );
+                        // endCharging();
+                        // done();
+                        // router.push({
+                        //   pathname: "/TypeScreen",
+                        //   params: { type_id: type_id },
+                        // });
                       }}
                     >
                       <Text style={styles.bookText}>Hoàn tất sạc</Text>
@@ -444,7 +535,7 @@ const TypeScreen = () => {
                 <View style={styles.sectionHeader}>
                   <Text style={styles.sectionTitle}>
                     {" "}
-                    Chữ điện: {types?.energy}
+                    Chữ điện: {energy}
                   </Text>
                 </View>
                 {messages !== "" && (
@@ -470,18 +561,34 @@ const TypeScreen = () => {
                       // await createReservation(); // Đợi tạo xong
                       const message = await createReservation();
                       if (
-                        
                         message ===
-                          "Bạn đã có một lịch đặt hoặc phiên sạc chưa hoàn thành."
+                        "Bạn đã có một lịch đặt hoặc phiên sạc chưa hoàn thành."
                       ) {
-
                         return; // Dừng ở đây, không gọi book hoặc chuyển trang
                       }
-                      await book(); // Tạo thông báo
-                      router.push({
-                        pathname: "/TypeScreen",
-                        params: { type_id: type_id },
-                      });
+                      Alert.alert(
+                        "Xác nhận",
+                        "Bạn có muốn đặc lịch sạc?",
+                        [
+                          { text: "Huỷ", style: "cancel" },
+                          {
+                            text: "Đặc Lịch Sạc",
+                            onPress: async () => {
+                              await book(); // Tạo thông báo
+                              router.push({
+                                pathname: "/TypeScreen",
+                                params: { type_id: type_id },
+                              });
+                            },
+                          },
+                        ],
+                        { cancelable: true }
+                      );
+                      // await book(); // Tạo thông báo
+                      // router.push({
+                      //   pathname: "/TypeScreen",
+                      //   params: { type_id: type_id },
+                      // });
                     } catch (error) {
                       console.error("Tạo đặt chỗ thất bại:", error);
                       // Có thể hiện thông báo lỗi ở đây

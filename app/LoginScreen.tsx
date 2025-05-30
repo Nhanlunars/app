@@ -96,7 +96,7 @@ export default function LoginScreen() {
         <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.input}
-          placeholder="nhập email của bạn"
+          placeholder="Nhập email của bạn"
           placeholderTextColor="#333"
           value={email}
           onChangeText={setEmail}
@@ -106,7 +106,7 @@ export default function LoginScreen() {
         <View style={styles.passwordContainer}>
           <TextInput
             style={[styles.input, { flex: 1 }]}
-            placeholder="nhập mật khẩu của bạn"
+            placeholder="Nhập mật khẩu của bạn"
             placeholderTextColor="#333"
             secureTextEntry={secureText}
             value={password}

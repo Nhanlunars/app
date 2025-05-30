@@ -9,7 +9,8 @@ import {
   Text,
   View,
 } from "react-native";
-import MapView, { Callout, Marker } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
+import BottomNav from "./BottomNav";
 
 const { width, height } = Dimensions.get("window");
 const router = useRouter();
@@ -73,53 +74,42 @@ const MapLocation = () => {
 
   return (
     <View style={styles.container}>
-      <MapView
-        ref={mapRef}
-        style={styles.map}
-        initialRegion={{
-          latitude: locations[0].lat,
-          longitude: locations[0].lng,
-          latitudeDelta: 0.1,
-          longitudeDelta: 0.1,
-        }}
-      >
-        {locations.map((loc) => (
-          <Marker
-            key={loc.id}
-            coordinate={{ latitude: loc.lat, longitude: loc.lng }}
-            // title={loc.location_name}
-            // description={loc.address}
-            // image={require("@/assets/images/684908.png")} // hoặc bỏ nếu không có icon
-          >
-            <Image
-              source={require("@/assets/images/684908.png")}
-              style={{ width: 20, height: 20 }} // tùy chỉnh kích thước nhỏ hơn
-              resizeMode="contain"
-            />
-            {/* <Callout>
-              <View style={{ width: 200 }}>
-                <Text style={{ fontWeight: "bold" }}>{loc.location_name}</Text>
-                <Text>{loc.address}</Text>
-                <TouchableOpacity
-                  style={{
-                    marginTop: 8,
-                    backgroundColor: "#007AFF",
-                    paddingVertical: 6,
-                    borderRadius: 4,
-                    alignItems: "center",
-                  }}
-                  onPress={() =>
-                    router.push({
-                      pathname: "/LocationScreen",
-                      params: { location_id: loc.id },
-                    })
-                  }
-                >
-                  <Text style={{ color: "#fff" }}>Xem chi tiết</Text>
-                </TouchableOpacity>
-              </View>
-            </Callout> */}
-            <Callout
+      <>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Bản Đồ</Text>
+        </View>
+        <MapView
+          ref={mapRef}
+          style={styles.map}
+          initialRegion={{
+            latitude: locations[0].lat,
+            longitude: locations[0].lng,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.1,
+          }}
+        >
+          {locations.map((loc) => (
+            <Marker
+              key={loc.id}
+              coordinate={{ latitude: loc.lat, longitude: loc.lng }}
+              title={loc.location_name}
+              description={loc.location_name + " " + loc.address}
+
+              // onPress={() => {
+              //   router.push({
+              //     pathname: "/LocationScreen",
+              //     params: { location_id: loc.id },
+              //   });
+              // }}
+              // image={require("@/assets/images/marker_icon_60x60.png")} // hoặc bỏ nếu không có icon
+            >
+              <Image
+                source={require("@/assets/images/marker_icon_60x60.png")}
+                style={{ width: 20, height: 20 }} // tùy chỉnh kích thước nhỏ hơn
+                resizeMode="contain"
+              />
+
+              {/* <Callout
               tooltip={false}
               onPress={() => {
                 router.push({
@@ -128,7 +118,7 @@ const MapLocation = () => {
                 });
               }}
             >
-              <View style={{ width: 200 }}>
+              {/* <View style={{ width: 200 }}>
                 <Text style={{ fontWeight: "bold", marginBottom: 4 }}>
                   {loc.location_name}
                 </Text>
@@ -144,11 +134,16 @@ const MapLocation = () => {
                 >
                   <Text style={{ color: "#fff" }}>Xem chi tiết</Text>
                 </View>
-              </View>
-            </Callout>
-          </Marker>
-        ))}
-      </MapView>
+              </View> 
+            </Callout> */}
+            </Marker>
+          ))}
+        </MapView>
+      </>
+      <View style={styles.footer}>
+        <BottomNav />
+      </View>
+      {/* <BottomNav /> */}
     </View>
   );
 };
@@ -157,13 +152,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  header: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#57d2d2",
+    padding: 16,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    zIndex: 10,
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
   map: {
     ...StyleSheet.absoluteFillObject,
+    flex: 1,
+    top: 10,
   },
   center: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  footer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 });
 

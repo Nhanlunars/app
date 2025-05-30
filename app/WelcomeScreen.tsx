@@ -8,6 +8,8 @@ type RootStackParamList = {
   Login: undefined;
   Register: undefined;
 };
+import { StatusBar } from "expo-status-bar";
+
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -16,6 +18,7 @@ export default function WelcomeScreen() {
 
   return (
     <View style={styles.container}>
+            <StatusBar style="light" hidden={true} />
       <View style={styles.textContainer}>
         <Text style={styles.title}>Public Charging Smart System</Text>
         <Text style={styles.subtitle}>"Power Up, Anytime, Anywhere!"</Text>

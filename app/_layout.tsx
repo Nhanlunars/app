@@ -55,7 +55,7 @@ function RootLayoutNav() {
   const { userToken } = useAuth();
 
   return (
-    <Stack>
+    <Stack screenOptions={{ headerShown: false, contentStyle: { paddingTop: 25 } }}>
       {!userToken ? (
         <>
           <Stack.Screen name="WelcomeScreen" options={{ headerShown: false }} />
@@ -112,7 +112,7 @@ export default function RootLayout() {
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <AuthProvider>
         <RootLayoutNav />
-        <StatusBar style="auto" />
+        {/* <StatusBar style="auto" /> */}
       </AuthProvider>
     </ThemeProvider>
   );

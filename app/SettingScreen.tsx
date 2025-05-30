@@ -10,6 +10,7 @@ import React from "react";
 import {
   Alert,
   Platform,
+  SafeAreaView,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -49,46 +50,51 @@ const SettingScreen = () => {
   return (
     <View style={styles.container}>
       {/* Header */}
-      <View style={styles.header} />
-
-      {/* Avatar + Name */}
-      <View style={styles.profileContainer}>
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>{userInfo?.lastName.charAt(0)}</Text>
+      <SafeAreaView style={{ flex: 1, paddingBottom: 60 }}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Cài đặc</Text>
         </View>
-        <Text style={styles.userName}>
-          {userInfo?.firstName} {userInfo?.lastName}
-        </Text>
-      </View>
 
-      {/* Menu */}
-      <View style={styles.menu}>
-        <MenuItem
-          icon={<Ionicons name="person" size={20} color="black" />}
-          label="Thông Tin Người Dùng"
-          //   onPress={() => router.push("/UserInfo")}
-        />
-        <MenuItem
-          icon={<Ionicons name="notifications" size={20} color="black" />}
-          label="Cài Đặt Thông Báo"
-          //   onPress={() => router.push("/NotificationSetting")}
-        />
-        <MenuItem
-          icon={<MaterialIcons name="edit" size={20} color="black" />}
-          label="Chỉnh Sửa Thông Tin"
-          //   onPress={() => router.push("/EditProfile")}
-        />
-        <MenuItem
-          icon={
-            <MaterialCommunityIcons name="logout" size={20} color="black" />
-          }
-          label="Đăng Xuất"
-          onPress={handleLogout}
-        />
-      </View>
+        {/* Avatar + Name */}
+        <View style={styles.profileContainer}>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>
+              {userInfo?.lastName.charAt(0)}
+            </Text>
+          </View>
+          <Text style={styles.userName}>
+            {userInfo?.firstName} {userInfo?.lastName}
+          </Text>
+        </View>
 
-      {/* Bottom Navigation */}
-      {/* <View style={styles.bottomNav}>
+        {/* Menu */}
+        <View style={styles.menu}>
+          <MenuItem
+            icon={<Ionicons name="person" size={20} color="black" />}
+            label="Thông Tin Người Dùng"
+            //   onPress={() => router.push("/UserInfo")}
+          />
+          <MenuItem
+            icon={<Ionicons name="notifications" size={20} color="black" />}
+            label="Cài Đặt Thông Báo"
+            //   onPress={() => router.push("/NotificationSetting")}
+          />
+          <MenuItem
+            icon={<MaterialIcons name="edit" size={20} color="black" />}
+            label="Chỉnh Sửa Thông Tin"
+            //   onPress={() => router.push("/EditProfile")}
+          />
+          <MenuItem
+            icon={
+              <MaterialCommunityIcons name="logout" size={20} color="black" />
+            }
+            label="Đăng Xuất"
+            onPress={handleLogout}
+          />
+        </View>
+
+        {/* Bottom Navigation */}
+        {/* <View style={styles.bottomNav}>
         <NavItem
           icon="home"
           label="Home"
@@ -110,6 +116,8 @@ const SettingScreen = () => {
           onPress={() => router.push("/SettingScreen")}
         />
       </View> */}
+      </SafeAreaView>
+
       <BottomNav />
     </View>
   );
@@ -144,6 +152,10 @@ const styles = StyleSheet.create({
     height: 50,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
   profileContainer: {
     alignItems: "center",
